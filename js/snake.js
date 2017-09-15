@@ -1,6 +1,13 @@
 let canvas;
 let ctx;
 
+// Up = -SCREEN_SIZE, Right = 1, Down = SCREEN_SIZE, Left = -1
+let direction;
+
+// A collection of squares the snake occupies where x = snake%SCREEN_SIZE and y = snake - snake%SCREEN_SIZE
+let snake;
+
+const SCREEN_SIZE = 64;
 const FRAMES_PER_SECOND = 30;
 
 window.onload = function() {
@@ -15,6 +22,8 @@ window.onload = function() {
 }
 
 function init() {
+  direction = -SCREEN_SIZE;
+  snake = [ getPosition(SCREEN_SIZE/2, SCREEN_SIZE/2) ];
 }
 
 function gameLoop() {
@@ -31,10 +40,26 @@ function checkCollisions() {
 
 function draw() {
   drawBackground();
+  drawSnake();
 }
 
 function drawBackground() {
   colorRect(0, 0, canvas.width, canvas.height, 'black');
+}
+
+function drawSnake() {
+  snake.forEach(function(pos) {
+    let coord = getCoordinates(pos);
+    drawSegment(coord.x, coord.y);
+  }, this);
+}
+
+function drawSegment(x, y) {
+  let xBlockSize = canvas.width / SCREEN_SIZE;
+  let yBlockSize = canvas.height / SCREEN_SIZE;
+  let x1 = x * xBlockSize;
+  let y1 = y * yBlockSize;
+  colorRect(x1, y1, xBlockSize, yBlockSize, 'white');
 }
 
 function drawCenterline() {
@@ -76,6 +101,16 @@ function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+}
+
+function getCoordinates(pos) {
+  let x = pos % SCREEN_SIZE;
+  let y = Math.floor(pos / SCREEN_SIZE);
+  return { x: x, y: y};
+}
+
+function getPosition(x, y) {
+  return SCREEN_SIZE * y + x;
 }
 
 function colorRect(x, y, width, height, color) {
