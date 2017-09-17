@@ -47,19 +47,29 @@ function init() {
 
 function gameLoop() {
   draw();
-  move();
-  checkCollisions();
+  if(!gameOver) {
+    move();
+    checkCollisions();
+  }
 }
 
 function move() {
-  if(!gameOver)
-    snake.push(snake[snake.length-1] += direction);
+  snake.push(snake[snake.length-1] + direction);
 }
 
 function checkCollisions() {
-  let head = getCoordinates(snake[snake.length-1]);
-  if(head.x === 0 || head.y === 0 || head.x === SCREEN_SIZE || head.y === SCREEN_SIZE) {
+  let headPos = snake[snake.length-1];
+  let headCoord = getCoordinates(headPos);
+  // Hit the borders
+  if(headCoord.x === 0 || headCoord.y === 0 || headCoord.x === SCREEN_SIZE - 1 || headCoord.y === SCREEN_SIZE - 1) {
     gameOver = true;
+  }
+  // Hit the snake
+  for(let i = 0; i < snake.length - 1; i++) {
+    if(snake[i] === headPos) {
+      gameOver = true;
+      break;
+    }
   }
 }
 
