@@ -7,6 +7,7 @@ let yBlockSize;
 // A collection of squares the snake occupies where x = snake%SCREEN_SIZE and y = snake - snake%SCREEN_SIZE
 let snake;
 let direction;
+let gameOver;
 
 const SCREEN_SIZE = 64;
 const FRAMES_PER_SECOND = 10;
@@ -37,6 +38,7 @@ window.onload = function() {
 }
 
 function init() {
+  gameOver = false;
   direction = UP;
   snake = [ getPosition(SCREEN_SIZE/2, SCREEN_SIZE/2) ];
   xBlockSize = canvas.width / SCREEN_SIZE;
@@ -50,15 +52,23 @@ function gameLoop() {
 }
 
 function move() {
-  snake.push(snake[snake.length-1] += direction);
+  if(!gameOver)
+    snake.push(snake[snake.length-1] += direction);
 }
 
 function checkCollisions() {
+  let head = getCoordinates(snake[snake.length-1]);
+  if(head.x === 0 || head.y === 0 || head.x === SCREEN_SIZE || head.y === SCREEN_SIZE) {
+    gameOver = true;
+  }
 }
 
 function draw() {
   drawBackground();
   drawSnake();
+  if(gameOver) {
+    drawGameOver();
+  }
 }
 
 function drawBackground() {
@@ -71,6 +81,13 @@ function drawSnake() {
     let coord = getCoordinates(pos);
     drawSegment(coord.x, coord.y);
   }, this);
+}
+
+function drawGameOver() {
+  ctx.fillStyle = 'red';
+  ctx.font = '48px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 4);
 }
 
 function drawSegment(x, y) {
