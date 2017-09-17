@@ -1,14 +1,17 @@
 let canvas;
 let ctx;
 
-// Up = -SCREEN_SIZE, Right = 1, Down = SCREEN_SIZE, Left = -1
-let direction;
-
 // A collection of squares the snake occupies where x = snake%SCREEN_SIZE and y = snake - snake%SCREEN_SIZE
 let snake;
+let direction;
 
 const SCREEN_SIZE = 64;
-const FRAMES_PER_SECOND = 30;
+const FRAMES_PER_SECOND = 10;
+
+const UP    = -SCREEN_SIZE;
+const RIGHT = 1;
+const DOWN  = SCREEN_SIZE;
+const LEFT  = -1;
 
 window.onload = function() {
   canvas = document.getElementById('game');
@@ -17,12 +20,21 @@ window.onload = function() {
   init();
   setInterval(gameLoop, 1000/FRAMES_PER_SECOND);
 
-  canvas.addEventListener('keydown', function(evt) {
+  document.addEventListener('keydown', function(event) {
+    if(event.key === 'ArrowUp' && direction !== DOWN) {
+      direction = UP;
+    } else if(event.key === 'ArrowDown' && direction !== UP) {
+      direction = DOWN;
+    } else if(event.key === 'ArrowLeft' && direction !== RIGHT) {
+      direction = LEFT;
+    } else if(event.key === 'ArrowRight' && direction !== LEFT) {
+      direction = RIGHT;
+    }
   });
 }
 
 function init() {
-  direction = -SCREEN_SIZE;
+  direction = UP;
   snake = [ getPosition(SCREEN_SIZE/2, SCREEN_SIZE/2) ];
 }
 
@@ -33,6 +45,7 @@ function gameLoop() {
 }
 
 function move() {
+  snake[0] += direction;
 }
 
 function checkCollisions() {
