@@ -1,6 +1,9 @@
 let canvas;
 let ctx;
 
+let xBlockSize;
+let yBlockSize;
+
 // A collection of squares the snake occupies where x = snake%SCREEN_SIZE and y = snake - snake%SCREEN_SIZE
 let snake;
 let direction;
@@ -36,6 +39,8 @@ window.onload = function() {
 function init() {
   direction = UP;
   snake = [ getPosition(SCREEN_SIZE/2, SCREEN_SIZE/2) ];
+  xBlockSize = canvas.width / SCREEN_SIZE;
+  yBlockSize = canvas.height / SCREEN_SIZE;
 }
 
 function gameLoop() {
@@ -57,7 +62,8 @@ function draw() {
 }
 
 function drawBackground() {
-  colorRect(0, 0, canvas.width, canvas.height, 'black');
+  colorRect(0, 0, canvas.width, canvas.height, 'green');
+  colorRect(xBlockSize, yBlockSize, canvas.width-xBlockSize*2, canvas.height-yBlockSize*2, 'black');
 }
 
 function drawSnake() {
@@ -68,8 +74,6 @@ function drawSnake() {
 }
 
 function drawSegment(x, y) {
-  let xBlockSize = canvas.width / SCREEN_SIZE;
-  let yBlockSize = canvas.height / SCREEN_SIZE;
   let x1 = x * xBlockSize;
   let y1 = y * yBlockSize;
   colorRect(x1, y1, xBlockSize, yBlockSize, 'white');
