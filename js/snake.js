@@ -45,7 +45,7 @@ function gameLoop() {
 }
 
 function move() {
-  snake[0] += direction;
+  snake.push(snake[snake.length-1] += direction);
 }
 
 function checkCollisions() {
