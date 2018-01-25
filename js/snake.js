@@ -106,47 +106,6 @@ function drawSegment(x, y) {
   colorRect(x1, y1, xBlockSize, yBlockSize, 'white');
 }
 
-function drawCenterline() {
-  ctx.strokeStyle = 'white';
-  ctx.beginPath();
-  ctx.setLineDash([18, 16]);
-  ctx.moveTo(canvas.width/2, 2);
-  ctx.lineTo(canvas.width/2, canvas.height);
-  ctx.stroke();
-}
-
-function drawPlayer1Score() {
-  ctx.fillStyle = 'green';
-  ctx.font = '48px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText(score1, canvas.width / 4, 50);
-}
-
-function drawPlayer2Score() {
-  ctx.fillStyle = 'green';
-  ctx.font = '48px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText(score2, canvas.width - canvas.width / 4, 50);
-}
-
-function drawWin() {
-  ctx.fillStyle = 'yellow';
-  ctx.font = '48px sans-serif';
-  ctx.textAlign = 'center';
-  var winner = score1 >= WIN_SCORE ? "You Win!!!" : "Computer Wins!!!";
-  ctx.fillText(winner, canvas.width / 2, canvas.height / 2);
-
-  ctx.fillStyle = 'white';
-  ctx.font = '24px sans-serif';
-  ctx.fillText("Click to play again", canvas.width / 2, canvas.height - canvas.height / 4);
-}
-
-function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
-}
-
 function getCoordinates(pos) {
   let x = pos % SCREEN_SIZE;
   let y = Math.floor(pos / SCREEN_SIZE);
@@ -160,11 +119,4 @@ function getPosition(x, y) {
 function colorRect(x, y, width, height, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, width, height);
-}
-
-function colorCircle(centerX, centerY, radius, color) {
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, radius, 0, Math.PI*2, true);
-  ctx.fill();
 }
