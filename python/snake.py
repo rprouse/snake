@@ -20,10 +20,20 @@ def move(t):
     t.setx(x + 20)
 
 # Move to random spot on the screen
-def move_rand(t):
-  x = random.randint(-290,290)
-  y = random.randint(-290,290)
+def move_rand(t, s):
+  w = int(s.window_width() / 2) - 20
+  h = int(s.window_height() / 2) - 20
+  x = random.randint(-w, w)
+  y = random.randint(-h, h)
   t.goto(x,y)
+
+def create_turtle(shape, color):
+  t = turtle.Turtle()
+  t.speed(0)
+  t.shape(shape)
+  t.color(color)
+  t.penup()
+  return t
 
 # Setup the screen
 wn = turtle.Screen()
@@ -33,21 +43,13 @@ wn.setup(width=600, height=600)
 wn.tracer(0) # Turns off screen updates
 
 # Snake
-head = turtle.Turtle()
-head.speed(0)
-head.shape("square")
-head.color("black")
-head.penup()
+head = create_turtle("square", "black")
 head.goto(0,0)
 head.direction = "stop"
 
 # Food
-food = turtle.Turtle()
-food.speed(0)
-food.shape("circle")
-food.color("red")
-food.penup()
-move_rand(food)
+food = create_turtle("circle", "red")
+move_rand(food, wn)
 
 # Keyboard bindings
 def go_up():
@@ -73,7 +75,7 @@ while True:
   wn.update()
 
   if head.distance(food) < 20:
-    move_rand(food)
+    move_rand(food, wn)
 
   move(head)
   time.sleep(delay)
