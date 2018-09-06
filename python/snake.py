@@ -77,6 +77,20 @@ wn.onkeypress(go_left, "Left")
 while True:
   wn.update()
 
+  #Check for collision
+  w = int(wn.window_width() / 2) - 20
+  h = int(wn.window_height() / 2) - 20
+
+  # Border collisons
+  if head.xcor() > w or head.xcor() < -w or head.ycor() > h or head.ycor() < -h:
+    time.sleep(1)
+    head.goto(0,0)
+    head.direction = "stop"
+    for b in body:
+      b.hideturtle()
+    body.clear()
+
+
   # Touching food?
   if head.distance(food) < 20:
     move_rand(food, wn)
