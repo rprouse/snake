@@ -1,7 +1,29 @@
+import random
 import turtle
 import time
 
 delay = 0.1
+
+# Functions
+def move(t):
+  if t.direction == "up":
+    y = t.ycor()
+    t.sety(y + 20)
+  if t.direction == "down":
+    y = t.ycor()
+    t.sety(y - 20)
+  if t.direction == "left":
+    x = t.xcor()
+    t.setx(x - 20)
+  if t.direction == "right":
+    x = t.xcor()
+    t.setx(x + 20)
+
+# Move to random spot on the screen
+def move_rand(t):
+  x = random.randint(-290,290)
+  y = random.randint(-290,290)
+  t.goto(x,y)
 
 # Setup the screen
 wn = turtle.Screen()
@@ -19,6 +41,15 @@ head.penup()
 head.goto(0,0)
 head.direction = "stop"
 
+# Food
+food = turtle.Turtle()
+food.speed(0)
+food.shape("circle")
+food.color("red")
+food.penup()
+move_rand(food)
+
+# Keyboard bindings
 def go_up():
   head.direction = "up"
 
@@ -31,21 +62,6 @@ def go_right():
 def go_left():
   head.direction = "left"
 
-def move():
-  if head.direction == "up":
-    y = head.ycor()
-    head.sety(y + 20)
-  if head.direction == "down":
-    y = head.ycor()
-    head.sety(y - 20)
-  if head.direction == "left":
-    x = head.xcor()
-    head.setx(x - 20)
-  if head.direction == "right":
-    x = head.xcor()
-    head.setx(x + 20)
-
-# Keyboard bindings
 wn.listen()
 wn.onkeypress(go_up, "Up")
 wn.onkeypress(go_down, "Down")
@@ -55,7 +71,11 @@ wn.onkeypress(go_left, "Left")
 # Main Game Loop
 while True:
   wn.update()
-  move()
+
+  if head.distance(food) < 20:
+    move_rand(food)
+
+  move(head)
   time.sleep(delay)
 
 wn.mainloop()
