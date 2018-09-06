@@ -35,6 +35,15 @@ def create_turtle(shape, color):
   t.penup()
   return t
 
+def die(head, body):
+  time.sleep(1)
+  head.goto(0,0)
+  head.direction = "stop"
+  for b in body:
+    b.hideturtle()
+  body.clear()
+
+
 # Setup the screen
 wn = turtle.Screen()
 wn.title("Snake")
@@ -56,16 +65,20 @@ move_rand(food, wn)
 
 # Keyboard bindings
 def go_up():
-  head.direction = "up"
+  if(head.direction != "down"):
+    head.direction = "up"
 
 def go_down():
-  head.direction = "down"
+  if(head.direction != "up"):
+    head.direction = "down"
 
 def go_right():
-  head.direction = "right"
+  if(head.direction != "left"):
+    head.direction = "right"
 
 def go_left():
-  head.direction = "left"
+  if(head.direction != "right"):
+    head.direction = "left"
 
 wn.listen()
 wn.onkeypress(go_up, "Up")
@@ -83,12 +96,12 @@ while True:
 
   # Border collisons
   if head.xcor() > w or head.xcor() < -w or head.ycor() > h or head.ycor() < -h:
-    time.sleep(1)
-    head.goto(0,0)
-    head.direction = "stop"
-    for b in body:
-      b.hideturtle()
-    body.clear()
+    die(head, body)
+
+  # Body collisons
+  for b in body:
+    if(head.distance(b) < 20):
+      die(head, body)
 
 
   # Touching food?
