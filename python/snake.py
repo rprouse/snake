@@ -42,10 +42,13 @@ wn.bgcolor("blue")
 wn.setup(width=600, height=600)
 wn.tracer(0) # Turns off screen updates
 
-# Snake
+# Snake head
 head = create_turtle("square", "black")
 head.goto(0,0)
 head.direction = "stop"
+
+# Snake body
+body = []
 
 # Food
 food = create_turtle("circle", "red")
@@ -74,8 +77,19 @@ wn.onkeypress(go_left, "Left")
 while True:
   wn.update()
 
+  # Touching food?
   if head.distance(food) < 20:
     move_rand(food, wn)
+
+    # Add body segment
+    body.append(create_turtle("square", "green"))
+
+  # Move body
+  for i in range(len(body)-1, -1, -1):
+    if(i == 0):
+      body[i].goto(head.xcor(), head.ycor())
+    else:
+      body[i].goto(body[i-1].xcor(), body[i-1].ycor())
 
   move(head)
   time.sleep(delay)
