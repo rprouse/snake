@@ -3,6 +3,8 @@ import turtle
 import time
 
 delay = 0.1
+score = 0
+high_score = 0
 
 # Functions
 def move(t):
@@ -35,13 +37,18 @@ def create_turtle(shape, color):
   t.penup()
   return t
 
-def die(head, body):
+def die(head, body, score, high_score):
+  if score > high_score:
+    high_score = score
+
+  score = 0
   time.sleep(1)
   head.goto(0,0)
   head.direction = "stop"
   for b in body:
     b.hideturtle()
   body.clear()
+  return high_score
 
 
 # Setup the screen
@@ -62,6 +69,11 @@ body = []
 # Food
 food = create_turtle("circle", "red")
 move_rand(food, wn)
+
+# Score
+text = create_turtle("square", "white")
+text.hideturtle()
+text.goto(0, int(wn.window_height() / 2)-40)
 
 # Keyboard bindings
 def go_up():
@@ -96,13 +108,14 @@ while True:
 
   # Border collisons
   if head.xcor() > w or head.xcor() < -w or head.ycor() > h or head.ycor() < -h:
-    die(head, body)
+    high_score = die(head, body, score, high_score)
+    score = 0
 
   # Body collisons
   for b in body:
     if(head.distance(b) < 20):
-      die(head, body)
-
+      high_score = die(head, body, score, high_score)
+      score = 0
 
   # Touching food?
   if head.distance(food) < 20:
@@ -110,6 +123,8 @@ while True:
 
     # Add body segment
     body.append(create_turtle("square", "green"))
+
+    score += 10
 
   # Move body
   for i in range(len(body)-1, -1, -1):
@@ -119,6 +134,10 @@ while True:
       body[i].goto(body[i-1].xcor(), body[i-1].ycor())
 
   move(head)
+
+  text.clear()
+  text.write("Score: {} High Score: {}".format(score, high_score), align="center", font=("Arial", 24, "normal"))
+
   time.sleep(delay)
 
 wn.mainloop()
